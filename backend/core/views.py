@@ -1,6 +1,6 @@
 from .models import UserQuery, ChatSession
 from .serializers import RegistrationSerializer, QuestionSerializer, UserQuerySerializer, ChatSessionSerializer, UserUpdateSerializer, ChangePasswordSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.views import APIView
@@ -9,6 +9,8 @@ from .services import LegalAssistantService
 
 class RegistrationView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

@@ -30,7 +30,7 @@ class VectorStoreLoader:
 
             embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
             
-            index_path = "faiss_index"
+            index_path = os.getenv("FAISS_INDEX_PATH", "faiss_index")
             if os.path.exists(index_path):
                 self._vector_store = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
             else:

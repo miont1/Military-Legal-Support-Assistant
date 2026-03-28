@@ -36,6 +36,7 @@ class LegalDocument(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     source_url = models.URLField()
+    raw_data = models.JSONField(null=True, blank=True, help_text="Зберігає оригінальний документ у форматі JSON")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

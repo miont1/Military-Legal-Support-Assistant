@@ -31,7 +31,9 @@ staticfiles/
 
 # Virtual Environment
 venv/
+.venv/
 .env
+!.env.example
 
 # Node.js / React
 node_modules/
