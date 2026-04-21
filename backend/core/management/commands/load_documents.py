@@ -5,13 +5,13 @@ from django.conf import settings
 from core.models import LegalDocument
 
 class Command(BaseCommand):
-    help = 'Завантажує документи з documents.json у базу даних PostgreSQL (core_legaldocument)'
+    help = 'Loads documents from documents.json into PostgreSQL database (core_legaldocument)'
 
     def handle(self, *args, **kwargs):
         file_path = os.path.join(settings.BASE_DIR, 'data', 'documents.json')
         
         if not os.path.exists(file_path):
-            self.stdout.write(self.style.ERROR(f'Файл не знайдено: {file_path}'))
+            self.stdout.write(self.style.ERROR(f'File not found: {file_path}'))
             return
 
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         updated_count = 0
 
         for doc_data in documents:
-            # Зберігаємо у форматі JSON
+            # Store in JSON format
             obj, created = LegalDocument.objects.update_or_create(
                 title=doc_data.get('title'),
                 defaults={
@@ -36,5 +36,5 @@ class Command(BaseCommand):
                 updated_count += 1
 
         self.stdout.write(self.style.SUCCESS(
-            f'Успішно завантажено документи. Створено: {created_count}, Оновлено: {updated_count}.'
+            f'Documents loaded successfully. Created: {created_count}, Updated: {updated_count}.'
         ))

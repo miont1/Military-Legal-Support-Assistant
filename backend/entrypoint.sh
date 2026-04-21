@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Strip Windows CRLF from environment variables (caused by .env files on Windows)
+# Strip Windows CRLF from environment variables
 for var in $(env | grep -oP '^[^=]+'); do
     val="$(printenv "$var" 2>/dev/null || true)"
     clean_val="$(echo "$val" | tr -d '\r')"
