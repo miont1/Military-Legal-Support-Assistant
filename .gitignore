@@ -46,5 +46,6 @@ coverage/
 
 # IDEs
 .vscode/
+.vscode
 .idea/
 *.swp
