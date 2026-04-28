@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'core',
+    'django_prometheus',
 ]
 
 REST_FRAMEWORK = {
@@ -40,6 +41,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'diplom.urls'
@@ -76,7 +79,7 @@ WSGI_APPLICATION = 'diplom.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME', 'diplom_db'),
         'USER': os.environ.get('DB_USER', 'diplom_user'),
         'PASSWORD': os.environ.get('DB_PASSWORD', 'diplom_password'),
