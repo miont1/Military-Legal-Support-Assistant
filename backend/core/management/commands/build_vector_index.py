@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from core.models import LegalDocument
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 class Command(BaseCommand):
     help = 'Synchronizes or creates a FAISS base from documents in the PostgreSQL database'
