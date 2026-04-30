@@ -60,8 +60,8 @@ class QuestionSerializer(serializers.Serializer):
     situation_stage = serializers.ChoiceField(choices=UserQuery.SITUATION_STAGE_CHOICES, required=False, allow_blank=True)
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    military_status = serializers.CharField(source='profile.military_status')
-    service_type = serializers.CharField(source='profile.service_type')
+    military_status = serializers.CharField(source='profile.military_status', allow_blank=True, required=False)
+    service_type = serializers.CharField(source='profile.service_type', allow_blank=True, required=False)
 
     class Meta:
         model = User
