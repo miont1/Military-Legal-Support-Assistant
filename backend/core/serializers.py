@@ -17,20 +17,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ['username', 'password', 'email', 'military_status', 'service_type']
 
     def create(self, validated_data):
+        from django.db import transaction
         military_status = validated_data.pop('military_status')
         service_type = validated_data.pop('service_type')
         
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data.get('email', ''),
-            password=validated_data['password']
-        )
-        
-        UserProfile.objects.create(
-            user=user,
-            military_status=military_status,
-            service_type=service_type
-        )
+        with transaction.atomic():
+            user = User.objects.create_user(
+                username=validated_data['username'],
+                email=validated_data.get('email', ''),
+                password=validated_data['password']
+            )
+            
+            UserProfile.objects.create(
+                user=user,
+                military_status=military_status,
+                service_type=service_type
+            )
         return user
 
 class ChatSessionSerializer(serializers.ModelSerializer):
@@ -58,8 +60,8 @@ class QuestionSerializer(serializers.Serializer):
     situation_stage = serializers.ChoiceField(choices=UserQuery.SITUATION_STAGE_CHOICES, required=False, allow_blank=True)
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    military_status = serializers.CharField(source='profile.military_status')
-    service_type = serializers.CharField(source='profile.service_type')
+    military_status = serializers.CharField(source='profile.military_status', allow_blank=True, required=False)
+    service_type = serializers.CharField(source='profile.service_type', allow_blank=True, required=False)
 
     class Meta:
         model = User

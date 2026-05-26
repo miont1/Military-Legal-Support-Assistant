@@ -19,3 +19,7 @@ langchain-community
 langchain-openai
 openai
 whitenoise
+django-prometheus
+pytest
+pytest-django
+pytest-cov

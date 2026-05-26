@@ -1,0 +1,8 @@
+version: "2"
+tunnels:
+  webapp:
+    proto: http
+    addr: nginx:80
+  grafana:
+    proto: http
+    addr: grafana:3000

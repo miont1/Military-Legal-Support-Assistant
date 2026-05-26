@@ -3,6 +3,7 @@ from django.core.management.base import BaseCommand
 from core.models import LegalDocument
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 class Command(BaseCommand):
     help = 'Synchronizes or creates a FAISS base from documents in the PostgreSQL database'
@@ -15,6 +16,13 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("No documents in the database for indexing."))
             return
             
+        # Initialize text splitter
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=200,
+            separators=["\n\n", "\n", " ", ""]
+        )
+
         texts = []
         metadatas = []
         
@@ -25,13 +33,17 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING(f"Skipped document '{doc.title}' due to missing text."))
                 continue
                 
-            texts.append(content)
-            # Add metadata which will be unpacked in RAG later
-            metadatas.append({
-                'id': doc.id,
-                'title': doc.title,
-                'source_url': doc.source_url or '#'
-            })
+            # Split the document into chunks
+            chunks = text_splitter.split_text(content)
+            
+            for chunk in chunks:
+                texts.append(chunk)
+                # Add metadata which will be unpacked in RAG later
+                metadatas.append({
+                    'id': doc.id,
+                    'title': doc.title,
+                    'source_url': doc.source_url or '#'
+                })
             
         if not texts:
             self.stdout.write(self.style.WARNING("No text available for indexing."))
